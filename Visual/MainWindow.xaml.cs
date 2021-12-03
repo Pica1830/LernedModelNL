@@ -67,10 +67,65 @@ namespace Visual
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if(Vars.path != null & Vars.pathinput != null)
+            if (b3.Content == "Процесс...".ToString())
             {
 
-                Program.predict(Vars.path, Vars.pathinput);
+            }
+            else predictA(b3);
+        }
+
+        static async void predictA(Button b3)
+        {
+            b3.Content = "Процесс...";
+
+            if (Vars.path != null & Vars.pathinput != null)
+            {
+                await Task.Run(() => Program.predict(Vars.path, Vars.pathinput));
+
+                b3.Content = "ГОТОВО!";
+            }
+        }
+
+        private void b1_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "Document"; // Default file name
+            dlg.DefaultExt = ".csv"; // Default file extension
+            dlg.Filter = "Text documents (.csv)|*.csv"; // Filter files by extension
+
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                Vars.path = dlg.FileName;
+                b1_Copy.Content = dlg.SafeFileName;
+                //lines.Content = "Число строк: " + Program.calc(Vars.path);
+            }
+        }
+
+        private void b3_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            if(b3_Copy.Content == "Процесс...".ToString())
+            {
+
+            }
+            else testA(b3_Copy, lll);
+        }
+
+        static async void testA(Button b3, Label lll)
+        {
+            b3.Content = "Процесс...";
+
+            if (Vars.path != null)
+            {
+                float acc = 0;
+
+                await Task.Run(() => acc = Program.test(Vars.path)); 
+
+                lll.Content = "Точность= " + acc + "%";
 
                 b3.Content = "ГОТОВО!";
             }

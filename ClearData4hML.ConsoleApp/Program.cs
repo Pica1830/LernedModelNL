@@ -78,25 +78,11 @@ namespace ClearData4hML.ConsoleApp
 
         static public void predict(string path1, string path2)
         {
-            /*
-             * Счётчик
-            int all = 0;
-            int well = 0;
-            int bad = 0;
-            */
+            
             List<output> go = new List<output>();
 
             string inputpath = path1; //сюда ввести путь для 
             string outputpath = path2; // Сюда ввести путь для сохранения результата
-
-            /*
-             * Раскомментировать для задания иных путей
-            Console.Write("Введите путь к файлу данных: ");
-            inputpath = Console.ReadLine();
-
-            Console.Write("Введите путь для сохранения результата: ");
-            outputpath = Console.ReadLine();
-            */
 
             using (var reader = new StreamReader(inputpath))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -133,29 +119,9 @@ namespace ClearData4hML.ConsoleApp
                         os = record.os,
                         osv = record.osv,
                     });
-                    /*
-                     * Счётчик
-                    all++;
-                    if (Result.Prediction == record.Segment)
-                    {
-                        well++;
-                    }
-                    else
-                    {
-                        bad++;
-                    }
-                    */
+                    
                 }
             }
-
-            /*
-             * Счётчик
-            Console.WriteLine("All: " + all);
-            Console.WriteLine("Well: " + well);
-            Console.WriteLine("Bad: " + bad);
-            Console.WriteLine("Точность: " + (well * 100) / all);
-            Console.ReadKey();
-            */
 
             IEnumerable<output> recordss = go;
 
@@ -165,6 +131,60 @@ namespace ClearData4hML.ConsoleApp
                 csv.WriteRecords(recordss);
             }
 
+        }
+
+        static public float test(string path)
+        {
+
+            float all = 0;
+            float well = 0;
+            float bad = 0;
+
+            List<output> go = new List<output>();
+
+            string inputpath = path; //сюда ввести путь для 
+
+            using (var reader = new StreamReader(inputpath))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                var records = csv.GetRecords<output>();
+
+                foreach (var record in records)
+                {
+                    ModelInput Data = new ModelInput()
+                    {
+                        Gamecategory = record.gamecategory,
+                        Subgamecategory = record.subgamecategory,
+                        Bundle = record.bundle,
+                        Created = record.created,
+                        Shift = record.shift,
+                        Oblast = record.oblast,
+                        City = record.city,
+                        Os = record.os,
+                        Osv = record.osv,
+                    };
+
+                    var Result = ConsumeModel.Predict(Data);
+
+                    all++;
+                    if (Result.Prediction == record.Segment)
+                    {
+                        well++;
+                    }
+                    else
+                    {
+                        bad++;
+                    }
+
+                }
+            }
+
+            Console.WriteLine("All: " + all);
+            Console.WriteLine("Well: " + well);
+            Console.WriteLine("Bad: " + bad);
+            Console.WriteLine("Точность: " + (well * 100) / all);
+
+            return (well * 100) / all;
         }
 
         static public int calc(string path)

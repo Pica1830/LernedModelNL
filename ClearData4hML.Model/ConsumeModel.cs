@@ -27,7 +27,7 @@ namespace ClearData4hML.Model
             MLContext mlContext = new MLContext();
 
             // Load model & create prediction engine
-            string modelPath = @"C:\Users\skripnikov.sv0832\AppData\Local\Temp\MLVSTools\ClearData4hML\ClearData4hML.Model\MLModel.zip";
+            string modelPath = @"C:\Users\SU\source\repos\LernedModelNL\ClearData4hML.Model\MLModel.zip";
             ITransformer mlModel = mlContext.Model.Load(modelPath, out var modelInputSchema);
             var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
 
