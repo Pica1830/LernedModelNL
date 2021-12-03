@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using ClearData4hML.Model;
 using CsvHelper;
 
@@ -35,9 +36,47 @@ namespace ClearData4hML.ConsoleApp
         public string osv { get; set; }
     }
 
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        static public void Main(string[] args)
+        {
+            /*
+             * 
+             * Пример работы с моделью
+            // Create single instance of sample data from first line of dataset for model input
+            ModelInput sampleData = new ModelInput()
+            {
+                Gamecategory = @"Games",
+                Subgamecategory = @"Racing",
+                Bundle = @"com.MadOut.BIG",
+                Created = @"2021-07-05 18:07:40",
+                Shift = @"MSK+6",
+                Oblast = @"Забайкальский Край",
+                City = @"Чита",
+                Os = @"android",
+                Osv = @"10.0",
+            };
+
+            // Make a single prediction on the sample data and print results
+            var predictionResult = ConsumeModel.Predict(sampleData);
+
+            Console.WriteLine("Using model to make single prediction -- Comparing actual Segment with predicted Segment from sample data...\n\n");
+            Console.WriteLine($"Gamecategory: {sampleData.Gamecategory}");
+            Console.WriteLine($"Subgamecategory: {sampleData.Subgamecategory}");
+            Console.WriteLine($"Bundle: {sampleData.Bundle}");
+            Console.WriteLine($"Created: {sampleData.Created}");
+            Console.WriteLine($"Shift: {sampleData.Shift}");
+            Console.WriteLine($"Oblast: {sampleData.Oblast}");
+            Console.WriteLine($"City: {sampleData.City}");
+            Console.WriteLine($"Os: {sampleData.Os}");
+            Console.WriteLine($"Osv: {sampleData.Osv}");
+            Console.WriteLine($"\n\nPredicted Segment value {predictionResult.Prediction} \nPredicted Segment scores: [{String.Join(",", predictionResult.Score)}]\n\n");
+            Console.WriteLine("=============== End of process, hit any key to finish ===============");
+            Console.ReadKey();
+            */
+        }
+
+        static public void predict(string path1, string path2)
         {
             /*
              * Счётчик
@@ -47,8 +86,8 @@ namespace ClearData4hML.ConsoleApp
             */
             List<output> go = new List<output>();
 
-            string inputpath = "C:\\Users\\skripnikov.sv0832\\Desktop\\test.csv"; //сюда ввести путь для 
-            string outputpath = "C:\\Users\\skripnikov.sv0832\\Desktop\\result.csv"; // Сюда ввести путь для сохранения результата
+            string inputpath = path1; //сюда ввести путь для 
+            string outputpath = path2; // Сюда ввести путь для сохранения результата
 
             /*
              * Раскомментировать для задания иных путей
@@ -93,7 +132,7 @@ namespace ClearData4hML.ConsoleApp
                         city = record.city,
                         os = record.os,
                         osv = record.osv,
-                    }) ;
+                    });
                     /*
                      * Счётчик
                     all++;
@@ -126,40 +165,26 @@ namespace ClearData4hML.ConsoleApp
                 csv.WriteRecords(recordss);
             }
 
-            /*
-             * 
-             * Пример работы с моделью
-            // Create single instance of sample data from first line of dataset for model input
-            ModelInput sampleData = new ModelInput()
+        }
+
+        static public int calc(string path)
+        {
+            int result = 0;
+
+            string inputpath = path;
+
+            using (var reader = new StreamReader(inputpath))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                Gamecategory = @"Games",
-                Subgamecategory = @"Racing",
-                Bundle = @"com.MadOut.BIG",
-                Created = @"2021-07-05 18:07:40",
-                Shift = @"MSK+6",
-                Oblast = @"Забайкальский Край",
-                City = @"Чита",
-                Os = @"android",
-                Osv = @"10.0",
-            };
+                var records = csv.GetRecords<input>();
 
-            // Make a single prediction on the sample data and print results
-            var predictionResult = ConsumeModel.Predict(sampleData);
+                List<input> rec = records.ToList();
 
-            Console.WriteLine("Using model to make single prediction -- Comparing actual Segment with predicted Segment from sample data...\n\n");
-            Console.WriteLine($"Gamecategory: {sampleData.Gamecategory}");
-            Console.WriteLine($"Subgamecategory: {sampleData.Subgamecategory}");
-            Console.WriteLine($"Bundle: {sampleData.Bundle}");
-            Console.WriteLine($"Created: {sampleData.Created}");
-            Console.WriteLine($"Shift: {sampleData.Shift}");
-            Console.WriteLine($"Oblast: {sampleData.Oblast}");
-            Console.WriteLine($"City: {sampleData.City}");
-            Console.WriteLine($"Os: {sampleData.Os}");
-            Console.WriteLine($"Osv: {sampleData.Osv}");
-            Console.WriteLine($"\n\nPredicted Segment value {predictionResult.Prediction} \nPredicted Segment scores: [{String.Join(",", predictionResult.Score)}]\n\n");
-            Console.WriteLine("=============== End of process, hit any key to finish ===============");
-            Console.ReadKey();
-            */
+                result = rec.Count;
+            }
+
+            return result;
         }
     }
+
 }

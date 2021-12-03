@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ClearData4hML.ConsoleApp;
 
 namespace Visual
 {
@@ -23,6 +24,56 @@ namespace Visual
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "Document"; // Default file name
+            dlg.DefaultExt = ".csv"; // Default file extension
+            dlg.Filter = "Text documents (.csv)|*.csv"; // Filter files by extension
+
+            // Show open file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                Vars.path = dlg.FileName;
+                b1.Content = dlg.SafeFileName;
+                //lines.Content = "Число строк: " + Program.calc(Vars.path);
+            }
+        }
+
+        private void Button_Click1(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "result"; // Default file name
+            dlg.DefaultExt = ".csv"; // Default file extension
+            dlg.Filter = "Text documents (.csv)|*.csv"; // Filter files by extension
+
+            // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                Vars.pathinput = dlg.FileName;
+                b2.Content = dlg.FileName;
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            if(Vars.path != null & Vars.pathinput != null)
+            {
+
+                Program.predict(Vars.path, Vars.pathinput);
+
+                b3.Content = "ГОТОВО!";
+            }
         }
     }
 }

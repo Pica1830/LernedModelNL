@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Visual
+{
+    public static class Vars
+    {
+        public static string path { get; set; }
+        public static string pathinput { get; set; }
+
+    }
+}
