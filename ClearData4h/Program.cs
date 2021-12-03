@@ -10,7 +10,7 @@ namespace ClearData4h
     {
         static void Main(string[] args)
         {
-            
+            //Заускать класс Programm в проекте "ClearData4hML.ConsoleApp"
         }
     }
 }
