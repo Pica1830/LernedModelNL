@@ -81,6 +81,19 @@ namespace ClearData4hML.ConsoleApp
 
                     var Result = ConsumeModel.Predict(Data);
 
+                    go.Add(new output
+                    {
+                        Segment = Result.Prediction,
+                        gamecategory = record.gamecategory,
+                        subgamecategory = record.subgamecategory,
+                        bundle = record.bundle,
+                        created = record.created,
+                        shift = record.shift,
+                        oblast = record.oblast,
+                        city = record.city,
+                        os = record.os,
+                        osv = record.osv,
+                    }) ;
                     /*
                      * Счётчик
                     all++;
